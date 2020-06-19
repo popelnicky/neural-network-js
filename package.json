@@ -1,0 +1,27 @@
+{
+  "name": "neural-network-prototype",
+  "version": "1.0.0",
+  "description": "It is a R&D project where autor tryed to combine 1) modern JavaScript, 2) synaptic.js neural network engine and 3) Web Workers",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/popelnicky/neural-network-js.git"
+  },
+  "keywords": [
+    "javascript",
+    "neural",
+    "network",
+    "nn",
+    "color",
+    "recognition"
+  ],
+  "author": "popelnicky@live.ru",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/popelnicky/neural-network-js/issues"
+  },
+  "homepage": "https://github.com/popelnicky/neural-network-js#readme"
+}
