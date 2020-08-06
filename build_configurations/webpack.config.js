@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 
@@ -9,23 +11,31 @@ module.exports = (env, args) => {
       path: path.resolve(__dirname, "../dist")
     },
     module: {
-      rules: []
+      rules: [
+        {
+          test: /\.js$/,
+          use: ["babel-loader"]
+        }
+      ]
     },
     plugins: [
-      new CopyWebpackPlugin([
-        {
-          from: "src/client/css",
-          to: "css/"
-        },
-        {
-          from: "src/client/assets",
-          to: "assets/"
-        },
-        {
-          from: "src/client/index.html",
-          to: "index.html"
-        }
-      ])
+      new CopyWebpackPlugin({
+        patterns:
+        [
+          {
+            from: "src/css",
+            to: "css/"
+          },
+          {
+            from: "src/assets",
+            to: "assets/"
+          },
+          {
+            from: "src/index.html",
+            to: "index.html"
+          }
+        ]
+      })
     ],
     resolve: {
       extensions: [".js"],
