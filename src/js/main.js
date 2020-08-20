@@ -1,3 +1,3 @@
-const $element = document.querySelector(".input-container");
+import Uploader from "./components/Uploader";
 
-console.log($element);
+new Uploader();
