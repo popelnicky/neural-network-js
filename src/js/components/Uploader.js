@@ -1,3 +1,5 @@
+import {EventConstants} from "../EventConstants";
+
 export default class Uploader {
   constructor() {
     this.$parent = document.querySelector(".input-container");
@@ -62,11 +64,15 @@ export default class Uploader {
 
       this.$element.classList.remove("dragover");
 
-      console.log(event.dataTransfer.files[0]);
+      const ev = new CustomEvent(EventConstants.FILE_UPLOADED, { detail: event.dataTransfer.files[0] });
+
+      document.dispatchEvent(ev);
     });
 
     this.$element.addEventListener("change", () => {
-      console.log($picture.files[0]);
+      const ev = new CustomEvent(EventConstants.FILE_UPLOADED, { detail: $picture.files[0] });
+
+      document.dispatchEvent(ev);
     });
   }
 }
