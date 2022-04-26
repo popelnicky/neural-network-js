@@ -1,12 +1,12 @@
 {
   "name": "neural-network-prototype",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "It is a R&D project where autor tryed to combine 1) modern JavaScript, 2) synaptic.js neural network engine and 3) Web Workers",
   "main": "main.js",
+  "type": "module",
   "scripts": {
-    "start": "webpack-dev-server --config ./build_configurations/webpack.config.js --mode development --devtool source-map",
-    "build": "webpack --config ./build_configurations/webpack.config.js --mode production --devtool none",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack-dev-server --config ./build_configurations/webpack.config.js --mode development --devtool inline-source-map",
+    "build": "webpack --config ./build_configurations/webpack.config.js --mode production"
   },
   "repository": {
     "type": "git",
@@ -27,16 +27,11 @@
   },
   "homepage": "https://github.com/popelnicky/neural-network-js#readme",
   "devDependencies": {
-    "@babel/core": "^7.10.3",
-    "@babel/plugin-proposal-class-properties": "^7.10.1",
-    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
-    "@babel/preset-env": "^7.10.3",
-    "babel-loader": "^8.1.0",
-    "copy-webpack-plugin": "^6.0.2",
+    "copy-webpack-plugin": "^10.2.4",
     "eslint": "^7.3.0",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1"
   },
   "dependencies": {
     "synaptic": "^1.1.4"

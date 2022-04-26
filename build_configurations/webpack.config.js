@@ -1,22 +1,18 @@
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-const path = require("path");
-const CopyWebpackPlugin = require("copy-webpack-plugin");
 
-module.exports = (env, args) => {
+import { resolve as _resolve, dirname } from "path";
+import CopyWebpackPlugin from "copy-webpack-plugin";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+export default (env, args) => {
   return {
     entry: "./src/js/main.js",
     output: {
       filename: "[name].min.js",
-      path: path.resolve(__dirname, "../dist")
-    },
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          use: ["babel-loader"]
-        }
-      ]
+      path: _resolve(__dirname, "../dist")
     },
     plugins: [
       new CopyWebpackPlugin({
