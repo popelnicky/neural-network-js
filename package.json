@@ -1,6 +1,6 @@
 {
   "name": "neural-network-prototype",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "It is a R&D project where autor tryed to combine 1) modern JavaScript, 2) synaptic.js neural network engine and 3) Web Workers",
   "main": "main.js",
   "type": "module",
