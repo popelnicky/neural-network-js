@@ -9,7 +9,7 @@ const __dirname = dirname(__filename);
 
 export default (env, args) => {
   return {
-    entry: "./src/js/main.js",
+    entry: "./code/main.js",
     output: {
       filename: "[name].min.js",
       path: _resolve(__dirname, "../dist")
@@ -19,7 +19,7 @@ export default (env, args) => {
         patterns:
         [
           {
-            from: "src/css",
+            from: "code/css",
             to: "css/"
           },
           {
@@ -27,7 +27,7 @@ export default (env, args) => {
             to: "assets/"
           },
           {
-            from: "src/index.html",
+            from: "code/index.html",
             to: "index.html"
           }
         ]
