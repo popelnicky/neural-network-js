@@ -35,7 +35,7 @@ export default (env, args) => {
     ],
     resolve: {
       extensions: [".js"],
-      modules: ["src", "node_modules", "src/js", "build_configurations"]
+      modules: ["src", "code", "node_modules", "src/js", "code/js", "build_configurations"]
     }
   };
 };
