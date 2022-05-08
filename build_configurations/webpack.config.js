@@ -29,6 +29,10 @@ export default (env, args) => {
           {
             from: "code/index.html",
             to: "index.html"
+          },
+          {
+            from: "code/js/svg.html",
+            to: "svg.html"
           }
         ]
       })

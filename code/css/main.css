@@ -4,7 +4,7 @@ body {
 	height: 100vh;
 }
 
-.main-layout {
+.main-view {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-around;
@@ -14,23 +14,56 @@ body {
 	/* background: #ccc; */
 }
 
-.left-view {
+.picture-view, .result-view {
 	display: flex;
 	width: 40%;
 	height: 60%;
-	background: rgb(252, 2, 2);
+	/* background: rgb(252, 2, 2); */
 }
 
-.center-view {
+.neural-network-view {
 	display: flex;
-	width: 15%;
+	justify-content: space-around;
+	align-items: center;
+	flex-wrap: wrap;
+	flex-direction: row;
+	width: 12%;
 	height: 45%;
-	background: rgb(52, 252, 2);
+	border: 2px solid #0094FF;
+	border-radius: 5px;
 }
 
-.right-view {
+.neural-network-item-view {
 	display: flex;
+	justify-content: center;
 	width: 40%;
-	height: 60%;
-	background: rgb(2, 6, 252);
+	height: 20%;
+	cursor: pointer;
+}
+
+.neural-network-item-view:hover {
+	transform: scale(1.05);
+	transition: transform 0.06s ease 0.03s;
+}
+
+.neural-network-item-view:active {
+	transform: scale(0.95);
+}
+
+.neural-network-item {
+	stroke: #808080;
+	stroke-width: 7%;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	fill: none;
+}
+
+.nn-item-out-circle {
+	stroke-dasharray: 220;
+	transform: rotate(-68deg);
+	transform-origin: 60px;
+}
+
+.nn-item-in-circle {
+	display: none;
 }
