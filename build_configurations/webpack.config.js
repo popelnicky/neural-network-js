@@ -9,7 +9,10 @@ const __dirname = dirname(__filename);
 
 export default (env, args) => {
   return {
-    entry: "./code/main.js",
+    entry: {
+      main: "./code/main.js",
+      network: "./code/network.js"
+    },
     output: {
       filename: "[name].min.js",
       path: _resolve(__dirname, "../dist")

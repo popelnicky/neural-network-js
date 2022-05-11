@@ -1,0 +1,1 @@
+export const NeuralNetworkItem = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth"];

@@ -5,16 +5,16 @@ export default class MainScreenView {
     this.$view = null;
   }
 
-  get template() {
-    return `<div class="picture-view"></div>
-            <div class="neural-network-view"></div>
-            <div class="result-view"></div>`;
+  get view() {
+    return this.$view;
   }
 
   init() {
     this.$view = document.createElement("div");
     this.$view.classList.add("main-view");
-    this.$view.innerHTML = this.template;
+    this.$view.innerHTML = `<div class="picture-view"></div>
+                            <div class="neural-network-view"></div>
+                            <div class="result-view"></div>`;
 
     document.body.append(this.$view);
 

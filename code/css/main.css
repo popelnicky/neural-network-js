@@ -58,12 +58,12 @@ body {
 	fill: none;
 }
 
-.nn-item-out-circle {
+.nn-item-outter-circle {
 	stroke-dasharray: 220;
 	transform: rotate(-68deg);
 	transform-origin: 60px;
 }
 
-.nn-item-in-circle {
+.nn-item-inner-circle {
 	display: none;
 }
