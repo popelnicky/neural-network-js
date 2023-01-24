@@ -10,39 +10,34 @@ const __dirname = dirname(__filename);
 export default (env, args) => {
   return {
     entry: {
-      main: "./code/main.js",
-      network: "./code/network.js"
+      main: "./src/main.js",
+      network: "./src/network.js",
     },
     output: {
       filename: "[name].min.js",
-      path: _resolve(__dirname, "../dist")
+      path: _resolve(__dirname, "../dist"),
     },
     plugins: [
       new CopyWebpackPlugin({
-        patterns:
-        [
+        patterns: [
           {
-            from: "code/css",
-            to: "css/"
+            from: "src/css",
+            to: "css/",
           },
           {
-            from: "src/assets",
-            to: "assets/"
+            from: "src/index.html",
+            to: "index.html",
           },
           {
-            from: "code/index.html",
-            to: "index.html"
+            from: "src/js/svg.html",
+            to: "svg.html",
           },
-          {
-            from: "code/js/svg.html",
-            to: "svg.html"
-          }
-        ]
-      })
+        ],
+      }),
     ],
     resolve: {
       extensions: [".js"],
-      modules: ["src", "code", "node_modules", "src/js", "code/js", "build_configurations"]
-    }
+      modules: ["src", "node_modules", "src/js", "build_configurations"],
+    },
   };
 };
