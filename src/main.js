@@ -1,15 +1,15 @@
-// import MainScreenView from "./js/views/MainScreenView.js";
+import { MainScreenView } from "./js/views/MainScreenView.js";
 
-// window.addEventListener("load", () => {
-//   let main = new MainScreenView();
+// const worker = new Worker("network.min.js");
 
-//   main.init();
+// worker.addEventListener("message", (resp) => {
+//   console.log("On the top page:");
+
+//   if (resp.data.payload) {
+//     console.log(JSON.parse(atob(resp.data.payload)));
+//   }
 // });
 
-const worker = new Worker("network.min.js");
-
-// import { NeuralNetwork } from "./js/services/NeuralNetwork.js";
-
-// const nn = new NeuralNetwork();
-
-// nn.train().then((results) => console.log(results));
+window.addEventListener("load", () => {
+  new MainScreenView().init();
+});

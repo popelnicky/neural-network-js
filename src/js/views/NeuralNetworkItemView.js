@@ -1,21 +1,15 @@
-export default class NeuralNetworkItemView {
+import { BaseView } from "./BaseView.js";
+
+export class NeuralNetworkItemView extends BaseView {
   constructor(id) {
+    super();
+
     this.id = id;
-
-    this.$view = null;
-    this.$svgContainer = null;
-    this.$line = null;
-    this.$outterCircle = null;
-    this.$innerCircle = null;
-  }
-
-  get view() {
-    return this.$view;
   }
 
   init() {
     this.$view = document.createElement("div");
-    
+
     this.$view.classList.add("neural-network-item-view");
     this.$view.classList.add(this.id);
 
@@ -24,7 +18,5 @@ export default class NeuralNetworkItemView {
                               <circle class="neural-network-item nn-item-outter-circle" cx="60" cy="60" r="40"/>
                               <circle class="neural-network-item nn-item-inner-circle" cx="60" cy="60" r="20"/>
                             </svg>`;
-
-    console.log(this.$view);
   }
 }

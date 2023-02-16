@@ -1,25 +1,16 @@
-import NeuralNetworkMainView from "./NeuralNetworkMainView.js";
+import { BaseView } from "./BaseView.js";
+import { NotificationView } from "./NotificationView.js";
+import { RecognizerView } from "./RecognizerView.js";
+import { UploadView } from "./UploadView.js";
 
-export default class MainScreenView {
+export class MainScreenView extends BaseView {
   constructor() {
-    this.$view = null;
-  }
-
-  get view() {
-    return this.$view;
+    super();
   }
 
   init() {
-    this.$view = document.createElement("div");
-    this.$view.classList.add("main-view");
-    this.$view.innerHTML = `<div class="picture-view"></div>
-                            <div class="neural-network-view"></div>
-                            <div class="result-view"></div>`;
-
-    document.body.append(this.$view);
-
-    const neuralNetworkView = new NeuralNetworkMainView();
-
-    neuralNetworkView.init();
+    new UploadView().init();
+    new RecognizerView().init();
+    new NotificationView().init();
   }
 }

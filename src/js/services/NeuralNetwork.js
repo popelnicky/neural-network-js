@@ -13,7 +13,6 @@ export class NeuralNetwork {
       const result = { status: "ok", data: null };
 
       if (this.trainer) {
-        result.status = "error";
         result.data = { message: "already trained" };
 
         resolve(result);
@@ -41,7 +40,7 @@ export class NeuralNetwork {
   }
 
   recognize(color) {
-    let result = null;
+    let result = [];
 
     if (this.perceptron) {
       const data = this.perceptron.activate([
