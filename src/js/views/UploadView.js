@@ -15,7 +15,7 @@ export class UploadView extends BaseView {
     this.$view.innerHTML = `<form class="upload-container">
                                 <img class="upload-image" src="/assets/upload-icon.png">
                                 <div>
-                                    <input class="upload-input" type="file" name="file">
+                                    <input id="picture" class="upload-input" type="file" name="file">
                                     <label class="upload-label" for="picture">Choose a pic</label>
                                     <span>or drag it here</span>
                                 </div>
@@ -43,17 +43,17 @@ export class UploadView extends BaseView {
       "dragenter",
       "dragleave",
       "drop",
-    ].forEach((event) => {
-      this.$uploader.addEventListener(event, (e) => {
+    ].forEach((ev) => {
+      this.$uploader.addEventListener(ev, (e) => {
         e.preventDefault();
       });
     });
 
-    // ["dragover", "dragenter"].forEach((event) => {
-    //   this.$uploader.addEventListener(event, () => {
-    //     this.$uploader.classList.add("dragover");
-    //   });
-    // });
+    ["dragover", "dragenter"].forEach((ev) => {
+      this.$uploader.addEventListener(ev, () => {
+        this.$uploader.classList.add("dragover");
+      });
+    });
 
     // this.$uploader.addEventListener("dragleave", (data) => {
     //   var dx = data.pageX - this.$uploader.offsetLeft;
@@ -68,24 +68,18 @@ export class UploadView extends BaseView {
     //   }
     // });
 
-    this.$uploader.addEventListener("drop", (data) => {
+    this.$uploader.addEventListener("drop", (ev) => {
       this.$uploader.classList.remove("dragover");
 
-      this.handle(data.dataTransfer.files[0]);
+      this.operate(ev.dataTransfer.files[0]);
     });
 
-    // this.$input.addEventListener("change", () => {
-    //   var event = new CustomEvent("file_uploaded", {
-    //     detail: this.files,
-    //   });
-
-    //   // document.dispatchEvent(event);
-
-    //   console.log(event);
-    // });
+    this.$input.addEventListener("change", (ev) => {
+      this.operate(ev.target.files[0]);
+    });
   }
 
-  handle(file) {
+  operate(file) {
     if (file.type == "image/jpeg" || file.type == "image/png") {
       const reader = new FileReader();
 

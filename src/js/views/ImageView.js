@@ -19,7 +19,7 @@ export class ImageView extends BaseView {
   }
 
   initListeners() {
-    document.addEventListener("clear", (event) => {
+    document.addEventListener("clear", (ev) => {
       this.clear();
     });
   }
