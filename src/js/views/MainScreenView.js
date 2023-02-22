@@ -45,4 +45,8 @@ export class MainScreenView extends BaseView {
   prepareResultView(size) {
     this.recognizerView.prepareResultView(size);
   }
+
+  clearViews() {
+    this.recognizerView.clearViews();
+  }
 }

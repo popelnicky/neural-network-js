@@ -1,20 +1,19 @@
 import { Utils } from "../services/Utils.js";
 import { MainScreenView } from "../views/MainScreenView.js";
 import { Pixel } from "../models/Pixel.js";
+import { NodesController } from "./NodesController.js";
 
 export class MainController {
   constructor() {
-    this.pool = [];
-
-    this.packSize = 1024;
-
+    this.nodesController = null;
     this.mainView = null;
   }
 
   run() {
     this.mainView = new MainScreenView();
-
     this.mainView.init();
+
+    this.nodesController = new NodesController(this);
 
     this.waitPic();
   }
@@ -23,6 +22,8 @@ export class MainController {
     const pic = await this.mainView.getUploadedPic();
 
     if (pic) {
+      this.mainView.clearViews();
+
       await this.mainView.drawOriginal(pic);
 
       const originalSize = this.mainView.getOriginalSize();
@@ -32,7 +33,7 @@ export class MainController {
       const imageData = this.mainView.getOriginalData();
       const pixels = await this.getPixels(imageData);
 
-      this.pool = Utils.shuffle(pixels);
+      this.nodesController.run(Utils.shuffle(pixels));
     }
 
     this.waitPic();

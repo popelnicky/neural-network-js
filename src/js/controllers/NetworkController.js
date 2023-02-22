@@ -33,6 +33,8 @@ export class NetworkController {
       case NodeCommand.SET_ID: {
         this.id = Serializer.decode(pkg.payload);
 
+        this.send(this.status);
+
         break;
       }
       case NodeCommand.GET_STATUS: {
@@ -40,7 +42,7 @@ export class NetworkController {
 
         break;
       }
-      case NodeCommand.OPERATE: {
+      case NodeCommand.RECOGNIZE: {
         if (pkg.payload) {
           const pixels = Serializer.decode(pkg.payload);
 

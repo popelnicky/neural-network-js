@@ -52,6 +52,10 @@ export class RecognizerView extends BaseView {
   prepareResultView(size) {
     this.resultView.setSize(size);
     this.resultView.refreshContext();
+  }
+
+  clearViews() {
+    this.originalView.clear();
     this.resultView.clear();
   }
 }

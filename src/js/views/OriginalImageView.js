@@ -1,4 +1,5 @@
 import { ImageView } from "./ImageView.js";
+import { Size } from "../models/Size.js";
 
 export class OriginalImageView extends ImageView {
   constructor(container) {
@@ -6,8 +7,6 @@ export class OriginalImageView extends ImageView {
   }
 
   draw(pic) {
-    this.clear();
-
     return new Promise((resolve, reject) => {
       const img = new Image();
 

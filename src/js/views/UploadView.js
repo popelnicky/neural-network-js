@@ -30,6 +30,10 @@ export class UploadView extends BaseView {
     this.$input = document.querySelector(".upload-input");
     this.$label = document.querySelector(".upload-label");
 
+    this.initListeners();
+  }
+
+  initListeners() {
     this.$input.addEventListener("focus", () => {
       this.$label.classList.add("focus");
     });
@@ -83,7 +87,7 @@ export class UploadView extends BaseView {
   }
 
   operate(file) {
-    if (file.type == "image/jpeg" || file.type == "image/png") {
+    if (file && (file.type == "image/jpeg" || file.type == "image/png")) {
       const reader = new FileReader();
 
       reader.addEventListener("load", (resp) => {
