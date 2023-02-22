@@ -1,3 +1,5 @@
 import { MainController } from "./js/controllers/MainController.js";
 
-new MainController().run();
+window.addEventListener("load", () => {
+  new MainController().run();
+});

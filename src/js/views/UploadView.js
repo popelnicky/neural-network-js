@@ -7,6 +7,9 @@ export class UploadView extends BaseView {
     this.$uploader = null;
     this.$input = null;
     this.$label = null;
+
+    this.func = (data) => {};
+    this.deferred = this.func;
   }
 
   init() {
@@ -83,22 +86,23 @@ export class UploadView extends BaseView {
     if (file.type == "image/jpeg" || file.type == "image/png") {
       const reader = new FileReader();
 
-      reader.addEventListener("loadend", (resp) => {
-        const img = new Image();
+      reader.addEventListener("load", (resp) => {
+        this.deferred(resp.target.result);
 
-        img.addEventListener("load", () => {
-          document.dispatchEvent(
-            new CustomEvent("pic_uploaded", {
-              detail: resp.target.result,
-            })
-          );
-        });
-
-        img.src = resp.target.result;
+        this.deferred = this.func;
       });
 
       reader.readAsDataURL(file);
     } else {
+      this.deferred(null);
+
+      this.deferred = this.func;
     }
+  }
+
+  getUploadedPic() {
+    return new Promise((resolve, reject) => {
+      this.deferred = resolve;
+    });
   }
 }

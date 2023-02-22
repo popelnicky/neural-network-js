@@ -6,6 +6,9 @@ import { ResultView } from "./ResultView.js";
 export class RecognizerView extends BaseView {
   constructor() {
     super();
+
+    this.originalView = null;
+    this.resultView = null;
   }
 
   init() {
@@ -22,7 +25,33 @@ export class RecognizerView extends BaseView {
     document.body.append(this.$view);
 
     new NeuralNetworkView(networkView).init();
-    new OriginalImageView(pictureView).init();
-    new ResultView(resultView).init();
+
+    this.originalView = new OriginalImageView(pictureView);
+    this.resultView = new ResultView(resultView);
+
+    this.originalView.init();
+    this.resultView.init();
+  }
+
+  drawOriginal(pic) {
+    return this.originalView.draw(pic);
+  }
+
+  drawResult(pixels) {
+    this.resultView.draw(pixels);
+  }
+
+  getOriginalData() {
+    return this.originalView.getImageData();
+  }
+
+  getOriginalSize() {
+    return this.originalView.getSize();
+  }
+
+  prepareResultView(size) {
+    this.resultView.setSize(size);
+    this.resultView.refreshContext();
+    this.resultView.clear();
   }
 }

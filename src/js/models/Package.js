@@ -1,6 +1,7 @@
 export class Package {
-  constructor(type, payload) {
-    this.type = type;
+  constructor(from, msg, payload) {
+    this.from = from;
+    this.msg = msg;
     this.payload = payload;
   }
 }

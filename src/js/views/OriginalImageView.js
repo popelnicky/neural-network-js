@@ -5,41 +5,36 @@ export class OriginalImageView extends ImageView {
     super(container);
   }
 
-  initListeners() {
-    super.initListeners();
+  draw(pic) {
+    this.clear();
 
-    document.addEventListener("pic_uploaded", (ev) => {
-      this.clear();
-
+    return new Promise((resolve, reject) => {
       const img = new Image();
 
       img.addEventListener("load", () => {
-        this.$canvas.width = img.naturalWidth;
-        this.$canvas.height = img.naturalHeight;
+        this.setSize(new Size(img.naturalWidth, img.naturalHeight));
 
-        this.context = this.$canvas.getContext("2d", {
-          willReadFrequently: true,
-        });
+        this.refreshContext();
 
         this.context.drawImage(img, 0, 0);
 
-        const imgData = this.context.getImageData(
-          0,
-          0,
-          this.$canvas.width,
-          this.$canvas.height
-        );
-
-        setTimeout(() => {
-          document.dispatchEvent(
-            new CustomEvent("got_pixels", {
-              detail: imgData,
-            })
-          );
-        });
+        resolve();
       });
 
-      img.src = ev.detail;
+      img.src = pic;
     });
+  }
+
+  getImageData() {
+    if (!this.context) {
+      return null;
+    }
+
+    return this.context.getImageData(
+      0,
+      0,
+      this.$canvas.width,
+      this.$canvas.height
+    );
   }
 }

@@ -1,98 +1,55 @@
-import { NodeCommand } from "../models/NodeCommand.js";
 import { Utils } from "../services/Utils.js";
 import { MainScreenView } from "../views/MainScreenView.js";
-import { Package } from "../models/Package.js";
-import { PixelModel } from "../models/PixelModel.js";
-import { Serializer } from "../services/Serializer.js";
-import { NodeStatus } from "../models/NodeStatus.js";
+import { Pixel } from "../models/Pixel.js";
 
 export class MainController {
   constructor() {
-    this.node = null;
-
     this.pool = [];
 
     this.packSize = 1024;
+
+    this.mainView = null;
   }
 
   run() {
-    this.node = new Worker("network.min.js");
+    this.mainView = new MainScreenView();
 
-    this.initListeners();
+    this.mainView.init();
+
+    this.waitPic();
   }
 
-  operate(pkg) {
-    switch (pkg.type) {
-      case NodeStatus.READY: {
-        if (pkg.payload) {
-          document.dispatchEvent(
-            new CustomEvent("draw_result", {
-              detail: Serializer.decode(pkg.payload),
-            })
-          );
-        }
+  async waitPic() {
+    const pic = await this.mainView.getUploadedPic();
 
-        if (this.pool.length == 0) {
-          return;
-        }
+    if (pic) {
+      await this.mainView.drawOriginal(pic);
 
-        let pack = [];
+      const originalSize = this.mainView.getOriginalSize();
 
-        if (this.pool.length > this.packSize) {
-          pack = this.pool.splice(0, this.packSize);
-        } else {
-          pack = this.pool;
+      this.mainView.prepareResultView(originalSize);
 
-          this.pool = [];
-        }
-
-        this.send(NodeCommand.OPERATE, pack);
-
-        break;
-      }
-      case NodeStatus.BUSY:
-      case NodeStatus.ON:
-      case NodeStatus.OFF: {
-        setTimeout(() => {
-          this.send(NodeCommand.GET_STATUS);
-        }, 1000);
-
-        break;
-      }
-      default: {
-      }
-    }
-  }
-
-  send(resp, payload = null) {
-    this.node.postMessage(
-      new Package(resp, payload ? Serializer.encode(payload) : payload)
-    );
-  }
-
-  initListeners() {
-    window.addEventListener("load", () => {
-      new MainScreenView().init();
-    });
-
-    this.node.addEventListener("message", (resp) => {
-      this.operate(resp.data);
-    });
-
-    document.addEventListener("got_pixels", async (ev) => {
-      const pixels = await this.preparePixels(ev.detail);
+      const imageData = this.mainView.getOriginalData();
+      const pixels = await this.getPixels(imageData);
 
       this.pool = Utils.shuffle(pixels);
+    }
 
-      this.send(NodeCommand.GET_STATUS);
-    });
+    this.waitPic();
   }
 
-  preparePixels(payload) {
+  getPixels(imageData) {
     return new Promise((resolve, reject) => {
       const result = [];
-      const colors = payload.data;
-      const width = payload.width;
+
+      if (!imageData) {
+        resolve(result);
+
+        return;
+      }
+
+      const colors = imageData.data;
+      const width = imageData.width;
 
       let x = 0;
       let y = 0;
@@ -100,7 +57,7 @@ export class MainController {
       for (let i = 0; i < colors.length; i += 4) {
         let [red, green, blue] = [colors[i], colors[i + 1], colors[i + 2]];
 
-        result.push(new PixelModel(red, green, blue, x++, y));
+        result.push(new Pixel(red, green, blue, x++, y));
 
         if (x >= width) {
           x = 0;
@@ -110,5 +67,9 @@ export class MainController {
 
       resolve(result);
     });
+  }
+
+  setResult(result) {
+    this.mainView.drawResult(result);
   }
 }

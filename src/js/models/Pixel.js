@@ -1,6 +1,4 @@
-import { ColorModel } from "./ColorModel.js";
-
-export class PixelModel {
+export class Pixel {
   constructor(red, green, blue, x, y) {
     this.r = red;
     this.g = green;
