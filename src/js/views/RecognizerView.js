@@ -1,5 +1,5 @@
 import { BaseView } from "./BaseView.js";
-import { NeuralNetworkView } from "./NeuralNetworkView.js";
+import { WorkerNodesView } from "./WorkerNodesView.js";
 import { OriginalImageView } from "./OriginalImageView.js";
 import { ResultView } from "./ResultView.js";
 
@@ -13,7 +13,7 @@ export class RecognizerView extends BaseView {
 
   init() {
     const pictureView = "picture-view";
-    const networkView = "neural-network-view";
+    const networkView = "worker-nodes-view";
     const resultView = "result-view";
 
     this.$view = document.createElement("div");
@@ -24,7 +24,7 @@ export class RecognizerView extends BaseView {
 
     document.body.append(this.$view);
 
-    new NeuralNetworkView(networkView).init();
+    new WorkerNodesView(networkView).init();
 
     this.originalView = new OriginalImageView(pictureView);
     this.resultView = new ResultView(resultView);

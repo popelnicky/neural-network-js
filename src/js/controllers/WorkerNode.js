@@ -1,6 +1,6 @@
 import { Color } from "../models/Color.js";
-import { NodeCommand } from "../models/NodeCommand.js";
-import { NodeStatus } from "../models/NodeStatus.js";
+import { NodeCommand } from "../constants/NodeCommand.js";
+import { NodeStatus } from "../constants/NodeStatus.js";
 import { Package } from "../models/Package.js";
 import { Pixel } from "../models/Pixel.js";
 import { NeuralNetwork } from "../services/NeuralNetwork.js";

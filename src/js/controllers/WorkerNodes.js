@@ -1,6 +1,6 @@
 import { Package } from "../models/Package.js";
-import { NodeCommand } from "../models/NodeCommand.js";
-import { NodeStatus } from "../models/NodeStatus.js";
+import { NodeCommand } from "../constants/NodeCommand.js";
+import { NodeStatus } from "../constants/NodeStatus.js";
 import { Serializer } from "../services/Serializer.js";
 
 export class WorkerNodes {

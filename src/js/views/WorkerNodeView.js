@@ -1,6 +1,6 @@
 import { BaseView } from "./BaseView.js";
 
-export class NeuralNetworkItemView extends BaseView {
+export class WorkerNodeView extends BaseView {
   constructor(id) {
     super();
 
@@ -10,7 +10,7 @@ export class NeuralNetworkItemView extends BaseView {
   init() {
     this.$view = document.createElement("div");
 
-    this.$view.classList.add("neural-network-item-view");
+    this.$view.classList.add("worker-node-view");
     this.$view.classList.add(this.id);
 
     this.$view.innerHTML = `<svg viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
