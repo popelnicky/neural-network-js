@@ -60,18 +60,19 @@ export class UploadView extends BaseView {
       });
     });
 
-    // this.$uploader.addEventListener("dragleave", (data) => {
-    //   var dx = data.pageX - this.$uploader.offsetLeft;
-    //   var dy = data.pageY - this.$uploader.offsetTop;
-    //   if (
-    //     dx < 0 ||
-    //     dx > this.$uploader.width ||
-    //     dy < 0 ||
-    //     dy > this.$uploader.height
-    //   ) {
-    //     this.$uploader.classList.remove("dragover");
-    //   }
-    // });
+    this.$uploader.addEventListener("dragleave", (data) => {
+      var dx = data.pageX - this.$uploader.offsetLeft;
+      var dy = data.pageY - this.$uploader.offsetTop;
+
+      if (
+        dx < 0 ||
+        dx >= this.$uploader.offsetWidth ||
+        dy < 0 ||
+        dy >= this.$uploader.offsetHeight
+      ) {
+        this.$uploader.classList.remove("dragover");
+      }
+    });
 
     this.$uploader.addEventListener("drop", (ev) => {
       this.$uploader.classList.remove("dragover");
