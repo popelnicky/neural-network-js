@@ -1,26 +1,23 @@
 import { Utils } from "../services/Utils.js";
 import { MainScreenView } from "../views/MainScreenView.js";
 import { Pixel } from "../models/Pixel.js";
-import { NodesController } from "./NodesController.js";
+import { WorkerNodes } from "./WorkerNodes.js";
 
 export class MainController {
   constructor() {
-    this.nodesController = null;
+    this.workerNodes = null;
     this.mainView = null;
   }
 
   run() {
-    this.mainView = new MainScreenView();
+    this.mainView = new MainScreenView(this);
     this.mainView.init();
 
-    this.nodesController = new NodesController(this);
-
-    this.waitPic();
+    this.workerNodes = new WorkerNodes(this);
   }
 
-  async waitPic() {
-    const pic = await this.mainView.getUploadedPic();
-
+  // TODO
+  async setPicture(pic) {
     if (pic) {
       this.mainView.clearViews();
 
@@ -33,10 +30,8 @@ export class MainController {
       const imageData = this.mainView.getOriginalData();
       const pixels = await this.getPixels(imageData);
 
-      this.nodesController.run(Utils.shuffle(pixels));
+      this.workerNodes.recognize(Utils.shuffle(pixels));
     }
-
-    this.waitPic();
   }
 
   getPixels(imageData) {

@@ -1,5 +1,5 @@
-import { NetworkController } from "./js/controllers/NetworkController.js";
+import { WorkerNode } from "./js/controllers/WorkerNode.js";
 
-const controller = new NetworkController();
+const node = new WorkerNode();
 
-controller.run();
+node.run();

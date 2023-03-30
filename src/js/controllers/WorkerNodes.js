@@ -3,16 +3,16 @@ import { NodeCommand } from "../models/NodeCommand.js";
 import { NodeStatus } from "../models/NodeStatus.js";
 import { Serializer } from "../services/Serializer.js";
 
-export class NodesController {
-  constructor(mainRef) {
-    this.mainRef = mainRef;
+export class WorkerNodes {
+  constructor(main) {
+    this.main = main;
     this.nodes = {};
     this.pool = [];
     this.packSize = 1024;
     this.start = 0;
   }
 
-  signalFor(id) {
+  dispatchTo(id, status) {
     let node = this.nodes[id];
 
     if (!node) {
@@ -26,9 +26,15 @@ export class NodesController {
 
       this.sendTo(node, NodeCommand.SET_ID, id);
     }
+
+    this.sendTo(node, status, id);
   }
 
-  run(pool) {
+  recognize(pool) {
+    if (this.pool.length > 0) {
+      return;
+    }
+
     this.pool = pool;
     this.start = 0;
 
@@ -47,10 +53,12 @@ export class NodesController {
         if (pkg.payload) {
           const result = Serializer.decode(pkg.payload);
 
-          this.mainRef.setResult(result);
+          this.main.setResult(result);
         }
 
         if (this.start >= this.pool.length) {
+          this.pool = [];
+
           return;
         }
 
@@ -65,16 +73,6 @@ export class NodesController {
         this.sendTo(node, NodeCommand.RECOGNIZE, pack);
 
         break;
-      }
-      case NodeStatus.BUSY:
-      case NodeStatus.ON: {
-        setTimeout(() => {
-          this.sendTo(node, NodeCommand.GET_STATUS);
-        }, 1000);
-
-        break;
-      }
-      default: {
       }
     }
   }

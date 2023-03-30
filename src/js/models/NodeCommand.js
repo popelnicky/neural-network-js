@@ -1,5 +1,7 @@
 export const NodeCommand = {
-  SET_ID: "SET_ID",
   GET_STATUS: "get_status",
+  ON: "on",
+  OFF: "off",
   RECOGNIZE: "recognize",
+  SET_ID: "set_id",
 };

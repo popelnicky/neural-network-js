@@ -4,16 +4,17 @@ import { RecognizerView } from "./RecognizerView.js";
 import { UploadView } from "./UploadView.js";
 
 export class MainScreenView extends BaseView {
-  constructor() {
+  constructor(controller) {
     super();
 
+    this.controller = controller;
     this.uploadView = null;
     this.recognizerView = null;
     this.notificationView = null;
   }
 
   init() {
-    this.uploadView = new UploadView();
+    this.uploadView = new UploadView(this);
     this.recognizerView = new RecognizerView();
     this.notificationView = new NotificationView();
 
@@ -22,16 +23,16 @@ export class MainScreenView extends BaseView {
     this.notificationView.init();
   }
 
+  clearViews() {
+    this.recognizerView.clearViews();
+  }
+
   drawOriginal(pic) {
     return this.recognizerView.drawOriginal(pic);
   }
 
   drawResult(pixels) {
     this.recognizerView.drawResult(pixels);
-  }
-
-  getUploadedPic() {
-    return this.uploadView.getUploadedPic();
   }
 
   getOriginalData() {
@@ -46,7 +47,7 @@ export class MainScreenView extends BaseView {
     this.recognizerView.prepareResultView(size);
   }
 
-  clearViews() {
-    this.recognizerView.clearViews();
+  sendUploadedPic(pic) {
+    this.controller.setPicture(pic);
   }
 }

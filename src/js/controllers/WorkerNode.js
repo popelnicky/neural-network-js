@@ -6,7 +6,7 @@ import { Pixel } from "../models/Pixel.js";
 import { NeuralNetwork } from "../services/NeuralNetwork.js";
 import { Serializer } from "../services/Serializer.js";
 
-export class NetworkController {
+export class WorkerNode {
   constructor() {
     this.id = "unknown";
     this.status = NodeStatus.OFF;
@@ -15,47 +15,58 @@ export class NetworkController {
     this.neuralNode = new NeuralNetwork();
   }
 
-  async run() {
+  run() {
     self.addEventListener("message", (req) => {
       this.operate(req.data);
     });
-
-    this.status = NodeStatus.ON;
-
-    await this.neuralNode.train();
-
-    this.trained = true;
-    this.status = NodeStatus.READY;
   }
 
   async operate(pkg) {
-    switch (pkg.msg) {
-      case NodeCommand.SET_ID: {
-        this.id = Serializer.decode(pkg.payload);
+    let result = null;
 
-        this.send(this.status);
+    switch (pkg.msg) {
+      case NodeCommand.OFF: {
+        this.status = NodeStatus.OFF;
 
         break;
       }
-      case NodeCommand.GET_STATUS: {
-        this.send(this.status);
+      case NodeCommand.ON: {
+        if (!this.trained) {
+          await this.neuralNode.train();
+
+          this.trained = true;
+        }
+
+        this.status = NodeStatus.READY;
 
         break;
       }
       case NodeCommand.RECOGNIZE: {
+        if (this.status != NodeStatus.READY) {
+          break;
+        }
+
         if (pkg.payload) {
           const pixels = Serializer.decode(pkg.payload);
 
-          const result = await this.recognize(pixels);
+          this.status = NodeStatus.BUSY;
 
-          this.send(this.status, result);
+          result = await this.recognize(pixels);
+
+          this.status =
+            this.status == NodeStatus.BUSY ? NodeStatus.READY : this.status;
         }
 
         break;
       }
-      default: {
+      case NodeCommand.SET_ID: {
+        this.id = Serializer.decode(pkg.payload);
+
+        break;
       }
     }
+
+    this.send(this.status, result);
   }
 
   send(msg, payload = null) {
@@ -65,8 +76,6 @@ export class NetworkController {
   }
 
   recognize(pixels) {
-    this.status = NodeStatus.BUSY;
-
     return new Promise((resolve, reject) => {
       const result = [];
 
@@ -80,8 +89,6 @@ export class NetworkController {
           new Pixel(recognized.r, recognized.g, recognized.b, pixel.x, pixel.y)
         );
       }
-
-      this.status = NodeStatus.READY;
 
       resolve(result);
     });

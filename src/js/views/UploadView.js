@@ -1,15 +1,13 @@
 import { BaseView } from "./BaseView.js";
 
 export class UploadView extends BaseView {
-  constructor() {
+  constructor(parent) {
     super();
 
+    this.parent = parent;
     this.$uploader = null;
     this.$input = null;
     this.$label = null;
-
-    this.func = (data) => {};
-    this.deferred = this.func;
   }
 
   init() {
@@ -90,23 +88,13 @@ export class UploadView extends BaseView {
     if (file && (file.type == "image/jpeg" || file.type == "image/png")) {
       const reader = new FileReader();
 
-      reader.addEventListener("load", (resp) => {
-        this.deferred(resp.target.result);
-
-        this.deferred = this.func;
+      reader.addEventListener("load", (ev) => {
+        this.parent.sendUploadedPic(ev.target.result);
       });
 
       reader.readAsDataURL(file);
     } else {
-      this.deferred(null);
-
-      this.deferred = this.func;
+      this.parent.sendUploadedPic(null);
     }
-  }
-
-  getUploadedPic() {
-    return new Promise((resolve, reject) => {
-      this.deferred = resolve;
-    });
   }
 }
