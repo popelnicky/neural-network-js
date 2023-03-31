@@ -54,4 +54,8 @@ export class MainScreenView extends BaseView {
   sendUploadedPic(pic) {
     this.controller.handlePicture(pic);
   }
+
+  showNotification(notification) {
+    this.notificationView.show(notification);
+  }
 }

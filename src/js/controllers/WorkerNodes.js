@@ -5,6 +5,7 @@ import { NodeState } from "../constants/NodeState.js";
 import { Serializer } from "../services/Serializer.js";
 import { Utils } from "../services/Utils.js";
 import { Pack } from "../models/Pack.js";
+import { Node as WorkerNode } from "../models/Node.js";
 import { PackNote } from "../constants/PackNote.js";
 
 export class WorkerNodes {
@@ -18,11 +19,13 @@ export class WorkerNodes {
     let node = this.nodes[id];
 
     if (!node) {
-      node = new Worker("network.min.js");
+      const worker = new Worker("network.min.js");
+
+      node = new WorkerNode(worker, NodeState.OFF);
 
       this.nodes[id] = node;
 
-      node.addEventListener("message", (resp) => {
+      node.worker.addEventListener("message", (resp) => {
         this.operate(resp.data);
       });
 
@@ -55,8 +58,11 @@ export class WorkerNodes {
     }
   }
 
+  //TODO
   async operate(pkg) {
     const node = this.nodes[pkg.from];
+
+    node.state = pkg.msg;
 
     switch (pkg.msg) {
       case NodeState.READY: {
@@ -68,7 +74,6 @@ export class WorkerNodes {
 
         let pack = this.getPack();
 
-        //TODO
         if (!pack) {
           let lost = this.pool.filter(
             (item) => item.note === PackNote.IN_PROCESSING
@@ -82,6 +87,8 @@ export class WorkerNodes {
 
           if (!pack) {
             this.pool = [];
+
+            this.main.progress("COMPLETED");
 
             break;
           }
@@ -130,8 +137,10 @@ export class WorkerNodes {
     return Utils.shuffle(result);
   }
 
+  //TODO
   async recognize(data) {
     if (this.pool.length > 0) {
+      this.main.progress("PROCESSING_PICTURE");
       return;
     }
 
@@ -139,17 +148,25 @@ export class WorkerNodes {
 
     this.setToPool(material);
 
+    let status = "NO_NODE";
+
     for (let id in this.nodes) {
       const node = this.nodes[id];
 
+      if (node.state != NodeState.OFF) {
+        status = "START_PROCESS";
+      }
+
       this.sendTo(node, NodeCommand.GET_STATUS);
     }
+
+    this.main.progress(status);
   }
 
   sendTo(node, msg, data = null) {
     const payload = data ? Serializer.encode(data) : data;
 
-    node.postMessage(new Package("main", msg, payload));
+    node.worker.postMessage(new Package("main", msg, payload));
   }
 
   setToPool(data) {
