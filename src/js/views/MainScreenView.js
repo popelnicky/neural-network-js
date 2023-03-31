@@ -15,7 +15,7 @@ export class MainScreenView extends BaseView {
 
   init() {
     this.uploadView = new UploadView(this);
-    this.recognizerView = new RecognizerView();
+    this.recognizerView = new RecognizerView(this);
     this.notificationView = new NotificationView();
 
     this.uploadView.init();
@@ -31,7 +31,7 @@ export class MainScreenView extends BaseView {
     return this.recognizerView.drawOriginal(pic);
   }
 
-  drawResult(pixels) {
+  async drawResult(pixels) {
     this.recognizerView.drawResult(pixels);
   }
 
@@ -47,7 +47,11 @@ export class MainScreenView extends BaseView {
     this.recognizerView.prepareResultView(size);
   }
 
+  sendStateTo(id, state) {
+    this.controller.dispatchTo(id, state);
+  }
+
   sendUploadedPic(pic) {
-    this.controller.setPicture(pic);
+    this.controller.handlePicture(pic);
   }
 }

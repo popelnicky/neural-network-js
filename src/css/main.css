@@ -80,7 +80,7 @@ body {
   outline-offset: -17px;
 }
 
-.picture-view,
+.original-view,
 .result-view {
   display: flex;
   align-items: center;
@@ -88,7 +88,7 @@ body {
   height: 60%;
 }
 
-.picture-view canvas,
+.original-view canvas,
 .result-view canvas {
   width: 100%;
 }
@@ -113,6 +113,12 @@ body {
   cursor: pointer;
 }
 
+.worker-node-view div {
+  width: 80%;
+  height: 80%;
+  cursor: pointer;
+}
+
 .worker-node-view:hover {
   transform: scale(1.05);
   transition: transform 0.06s ease 0.03s;
@@ -122,20 +128,10 @@ body {
   transform: scale(0.95);
 }
 
-.neural-network-item {
-  stroke: #808080;
-  stroke-width: 7%;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  fill: none;
+.worker-node-off {
+  background-color: crimson;
 }
 
-.nn-item-outter-circle {
-  stroke-dasharray: 220;
-  transform: rotate(-68deg);
-  transform-origin: 60px;
-}
-
-.nn-item-inner-circle {
-  display: none;
+.worker-node-on {
+  background-color: forestgreen;
 }

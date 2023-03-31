@@ -9,34 +9,32 @@ export class NeuralNetwork {
   }
 
   async train() {
-    return new Promise((resolve, reject) => {
-      const result = { status: "ok", data: null };
+    const result = { status: "ok", data: null };
 
-      if (this.trainer) {
-        result.data = { message: "already trained" };
-
-        resolve(result);
-
-        return;
-      }
-
-      this.colors = trainCfg.colors;
-
-      this.perceptron = new Architect.Perceptron(3, 14, this.colors.length);
-      this.trainer = new Trainer(this.perceptron);
-
-      const data = this.trainer.train(trainCfg.set, {
-        rate: 0.1,
-        iterations: 100000,
-        error: 0.005,
-        shuffle: true,
-        cost: Trainer.cost.CROSS_ENTROPY,
-      });
-
-      result.data = data;
+    if (this.trainer) {
+      result.data = { message: "already trained" };
 
       resolve(result);
+
+      return;
+    }
+
+    this.colors = trainCfg.colors;
+
+    this.perceptron = new Architect.Perceptron(3, 14, this.colors.length);
+    this.trainer = new Trainer(this.perceptron);
+
+    const data = this.trainer.train(trainCfg.set, {
+      rate: 0.1,
+      iterations: 100000,
+      error: 0.005,
+      shuffle: true,
+      cost: Trainer.cost.CROSS_ENTROPY,
     });
+
+    result.data = data;
+
+    return result;
   }
 
   recognize(color) {

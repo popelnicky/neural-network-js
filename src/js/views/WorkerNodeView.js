@@ -1,22 +1,33 @@
+import { NodeState } from "../constants/NodeState.js";
 import { BaseView } from "./BaseView.js";
 
 export class WorkerNodeView extends BaseView {
-  constructor(id) {
+  constructor(id, parent) {
     super();
 
+    this.parent = parent;
     this.id = id;
+    this.enabled = false;
   }
 
   init() {
     this.$view = document.createElement("div");
 
     this.$view.classList.add("worker-node-view");
-    this.$view.classList.add(this.id);
+    this.$view.classList.add("worker-node-off");
 
-    this.$view.innerHTML = `<svg viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                              <line class="neural-network-item nn-item-line" x1="60" y1="12" x2="60" y2="36" />
-                              <circle class="neural-network-item nn-item-outter-circle" cx="60" cy="60" r="40"/>
-                              <circle class="neural-network-item nn-item-inner-circle" cx="60" cy="60" r="20"/>
-                            </svg>`;
+    this.$view.innerHTML = `<div class="${this.id}"></div>`;
+  }
+
+  toggle() {
+    this.$view.classList.toggle("worker-node-off");
+    this.$view.classList.toggle("worker-node-on");
+
+    this.enabled = !this.enabled;
+
+    this.parent.sendStateTo(
+      this.id,
+      this.enabled ? NodeState.ON : NodeState.OFF
+    );
   }
 }

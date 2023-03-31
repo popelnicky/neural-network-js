@@ -1,12 +1,14 @@
-import { Utils } from "../services/Utils.js";
 import { MainScreenView } from "../views/MainScreenView.js";
-import { Pixel } from "../models/Pixel.js";
 import { WorkerNodes } from "./WorkerNodes.js";
 
 export class MainController {
   constructor() {
     this.workerNodes = null;
     this.mainView = null;
+  }
+
+  dispatchTo(id, state) {
+    this.workerNodes.dispatchTo(id, state);
   }
 
   run() {
@@ -16,8 +18,7 @@ export class MainController {
     this.workerNodes = new WorkerNodes(this);
   }
 
-  // TODO
-  async setPicture(pic) {
+  async handlePicture(pic) {
     if (pic) {
       this.mainView.clearViews();
 
@@ -28,41 +29,9 @@ export class MainController {
       this.mainView.prepareResultView(originalSize);
 
       const imageData = this.mainView.getOriginalData();
-      const pixels = await this.getPixels(imageData);
 
-      this.workerNodes.recognize(Utils.shuffle(pixels));
+      this.workerNodes.recognize(imageData);
     }
-  }
-
-  getPixels(imageData) {
-    return new Promise((resolve, reject) => {
-      const result = [];
-
-      if (!imageData) {
-        resolve(result);
-
-        return;
-      }
-
-      const colors = imageData.data;
-      const width = imageData.width;
-
-      let x = 0;
-      let y = 0;
-
-      for (let i = 0; i < colors.length; i += 4) {
-        let [red, green, blue] = [colors[i], colors[i + 1], colors[i + 2]];
-
-        result.push(new Pixel(red, green, blue, x++, y));
-
-        if (x >= width) {
-          x = 0;
-          y++;
-        }
-      }
-
-      resolve(result);
-    });
   }
 
   setResult(result) {

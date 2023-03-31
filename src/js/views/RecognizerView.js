@@ -4,40 +4,48 @@ import { OriginalImageView } from "./OriginalImageView.js";
 import { ResultView } from "./ResultView.js";
 
 export class RecognizerView extends BaseView {
-  constructor() {
+  constructor(parent) {
     super();
 
+    this.parent = parent;
+
     this.originalView = null;
+    this.workerNodesView = null;
     this.resultView = null;
   }
 
   init() {
-    const pictureView = "picture-view";
-    const networkView = "worker-nodes-view";
-    const resultView = "result-view";
+    const original = "original-view";
+    const workerNodes = "worker-nodes-view";
+    const result = "result-view";
 
     this.$view = document.createElement("div");
     this.$view.classList.add("recognizer-view");
-    this.$view.innerHTML = `<div class="${pictureView}"></div>
-                            <div class="${networkView}"></div>
-                            <div class="${resultView}"></div>`;
+    this.$view.innerHTML = `<div class="${original}"></div>
+                            <div class="${workerNodes}"></div>
+                            <div class="${result}"></div>`;
 
     document.body.append(this.$view);
 
-    new WorkerNodesView(networkView).init();
-
-    this.originalView = new OriginalImageView(pictureView);
-    this.resultView = new ResultView(resultView);
+    this.originalView = new OriginalImageView(original);
+    this.workerNodesView = new WorkerNodesView(workerNodes, this);
+    this.resultView = new ResultView(result);
 
     this.originalView.init();
+    this.workerNodesView.init();
     this.resultView.init();
+  }
+
+  clearViews() {
+    this.originalView.clear();
+    this.resultView.clear();
   }
 
   drawOriginal(pic) {
     return this.originalView.draw(pic);
   }
 
-  drawResult(pixels) {
+  async drawResult(pixels) {
     this.resultView.draw(pixels);
   }
 
@@ -54,8 +62,7 @@ export class RecognizerView extends BaseView {
     this.resultView.refreshContext();
   }
 
-  clearViews() {
-    this.originalView.clear();
-    this.resultView.clear();
+  sendStateTo(id, state) {
+    this.parent.sendStateTo(id, state);
   }
 }
