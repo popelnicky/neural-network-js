@@ -92,9 +92,8 @@ export class WorkerNode {
   async recognize(pixels) {
     const result = [];
 
-    for (let i = 0; i < pixels.length; i++) {
-      const pixel = pixels[i];
-      let recognized = this.neuralNode.recognize(
+    for (let pixel of pixels) {
+      const recognized = this.neuralNode.recognize(
         new Color(pixel.r, pixel.g, pixel.b)
       );
 

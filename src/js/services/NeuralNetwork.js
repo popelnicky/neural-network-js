@@ -14,9 +14,7 @@ export class NeuralNetwork {
     if (this.trainer) {
       result.data = { message: "already trained" };
 
-      resolve(result);
-
-      return;
+      return result;
     }
 
     this.colors = trainCfg.colors;

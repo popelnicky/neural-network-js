@@ -6,8 +6,7 @@ export class ResultView extends ImageView {
   }
 
   async draw(result) {
-    for (let i = 0; i < result.length; i++) {
-      const item = result[i];
+    for (let item of result) {
       const pixel = this.context.createImageData(1, 1);
 
       [pixel.data[0], pixel.data[1], pixel.data[2], pixel.data[3]] = [

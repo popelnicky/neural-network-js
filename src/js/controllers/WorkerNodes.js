@@ -36,19 +36,22 @@ export class WorkerNodes {
     return this.pool.find((item) => item.note === PackNote.FOR_PROCESSING);
   }
 
-  //TODO
   handleResult(payload) {
-    if (payload) {
-      const result = Serializer.decode(payload);
-      const pack = this.pool.find((item) => item.mark === result.mark);
+    if (!payload) {
+      return;
+    }
 
-      if (pack) {
-        pack.note = result.note;
+    const result = Serializer.decode(payload);
+    const pack = this.pool.find((item) => item.mark === result.mark);
 
-        if (result.note === PackNote.PROCESSED) {
-          this.main.setResult(result.content);
-        }
-      }
+    if (!pack || !pack.note) {
+      return;
+    }
+
+    pack.note = result.note;
+
+    if (result.note === PackNote.PROCESSED) {
+      this.main.setResult(result.content);
     }
   }
 
