@@ -1,21 +1,32 @@
 import { MainScreenView } from "../views/MainScreenView.js";
 import { WorkerNodes } from "./WorkerNodes.js";
 import { Notification as WorkerNotification } from "../constants/Notification.js";
+import { ProgressState } from "../constants/ProgressState.js";
 
 export class MainController {
   constructor() {
     this.workerNodes = null;
     this.mainView = null;
+
+    // TODO: Don't like it. Needs to improve
+    this.inProgress = false;
   }
 
   dispatchTo(id, state) {
     this.workerNodes.dispatchTo(id, state);
   }
 
-  //TODO
   async handlePicture(pic) {
+    if (this.inProgress) {
+      this.progress(ProgressState.PROCESSING_PICTURE);
+
+      return;
+    }
+
     if (!pic) {
-      this.mainView.showNotification(WorkerNotification.WRONG_PICTURE);
+      this.progress(ProgressState.WRONG_PICTURE);
+
+      return;
     }
 
     this.mainView.clearViews();
@@ -29,11 +40,16 @@ export class MainController {
     const imageData = this.mainView.getOriginalData();
 
     this.workerNodes.recognize(imageData);
+
+    this.inProgress = true;
   }
 
-  //TODO
   progress(state) {
     this.mainView.showNotification(WorkerNotification[state]);
+
+    if (state === ProgressState.COMPLETED) {
+      this.inProgress = false;
+    }
   }
 
   run() {

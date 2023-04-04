@@ -1,5 +1,6 @@
 import { NotificationType } from "./NotificationType.js";
 
+// TODO: Don't like it. Needs to improve
 export const Notification = {
   COMPLETED: {
     type: NotificationType.SUCCESS,
@@ -12,8 +13,8 @@ export const Notification = {
     desc: "Any node does not turned on",
   },
   PROCESSING_PICTURE: {
-    type: NotificationType.ERROR,
-    title: "Error",
+    type: NotificationType.WARN,
+    title: "In progress",
     desc: "No chance to start new picture while the process is in progress",
   },
   START_PROCESS: {

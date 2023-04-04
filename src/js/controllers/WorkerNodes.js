@@ -7,32 +7,36 @@ import { Utils } from "../services/Utils.js";
 import { Pack } from "../models/Pack.js";
 import { Node as WorkerNode } from "../models/Node.js";
 import { PackNote } from "../constants/PackNote.js";
+import { ProgressState } from "../constants/ProgressState.js";
 
 export class WorkerNodes {
   constructor(main) {
     this.main = main;
     this.nodes = {};
     this.pool = [];
+
+    // TODO: Don't like it. Needs to improve
+    this.progressState = ProgressState.NO_NODE;
   }
 
-  dispatchTo(id, status) {
+  dispatchTo(id, state) {
     let node = this.nodes[id];
 
     if (!node) {
       const worker = new Worker("network.min.js");
 
+      worker.addEventListener("message", (resp) => {
+        this.operate(resp.data);
+      });
+
       node = new WorkerNode(worker, NodeState.OFF);
 
       this.nodes[id] = node;
 
-      node.worker.addEventListener("message", (resp) => {
-        this.operate(resp.data);
-      });
-
       this.sendTo(node, NodeCommand.SET_ID, id);
     }
 
-    this.sendTo(node, status, id);
+    this.sendTo(node, state, id);
   }
 
   getPack() {
@@ -45,7 +49,7 @@ export class WorkerNodes {
     }
 
     const result = Serializer.decode(payload);
-    const pack = this.pool.find((item) => item.mark === result.mark);
+    let pack = this.pool.find((item) => item.mark === result.mark);
 
     if (!pack || !pack.note) {
       return;
@@ -56,9 +60,23 @@ export class WorkerNodes {
     if (result.note === PackNote.PROCESSED) {
       this.main.setResult(result.content);
     }
+
+    pack = this.getPack();
+
+    if (!pack) {
+      const lost = this.pool.filter(
+        (item) => item.note === PackNote.IN_PROCESSING
+      );
+
+      if (lost.length < 1) {
+        this.pool = [];
+
+        this.progressState = ProgressState.COMPLETED;
+        this.notifyProgress(this.progressState);
+      }
+    }
   }
 
-  //TODO
   async operate(pkg) {
     const node = this.nodes[pkg.from];
 
@@ -75,23 +93,7 @@ export class WorkerNodes {
         let pack = this.getPack();
 
         if (!pack) {
-          let lost = this.pool.filter(
-            (item) => item.note === PackNote.IN_PROCESSING
-          );
-
-          for (let item of lost) {
-            item.note = PackNote.FOR_PROCESSING;
-          }
-
-          pack = this.getPack();
-
-          if (!pack) {
-            this.pool = [];
-
-            this.main.progress("COMPLETED");
-
-            break;
-          }
+          break;
         }
 
         pack.note = PackNote.IN_PROCESSING;
@@ -137,10 +139,15 @@ export class WorkerNodes {
     return Utils.shuffle(result);
   }
 
-  //TODO
+  notifyProgress(progressState) {
+    this.main.progress(progressState);
+  }
+
   async recognize(data) {
     if (this.pool.length > 0) {
-      this.main.progress("PROCESSING_PICTURE");
+      this.progressState = ProgressState.PROCESSING_PICTURE;
+      this.notifyProgress(this.progressState);
+
       return;
     }
 
@@ -148,19 +155,19 @@ export class WorkerNodes {
 
     this.setToPool(material);
 
-    let status = "NO_NODE";
+    this.progressState = ProgressState.NO_NODE;
 
     for (let id in this.nodes) {
       const node = this.nodes[id];
 
       if (node.state != NodeState.OFF) {
-        status = "START_PROCESS";
+        this.progressState = ProgressState.START_PROCESS;
       }
 
       this.sendTo(node, NodeCommand.GET_STATUS);
     }
 
-    this.main.progress(status);
+    this.main.progress(this.progressState);
   }
 
   sendTo(node, msg, data = null) {

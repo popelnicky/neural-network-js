@@ -86,7 +86,7 @@ export class UploadView extends BaseView {
   }
 
   operate(file) {
-    if (file && (file.type == "image/jpeg" || file.type == "image/png")) {
+    if (file && (file.type === "image/jpeg" || file.type === "image/png")) {
       const reader = new FileReader();
 
       reader.addEventListener("load", (ev) => {

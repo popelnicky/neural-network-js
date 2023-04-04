@@ -1,6 +1,6 @@
 export class Utils {
   static shuffle(arr) {
-    if (!arr.length || arr.length == 0) {
+    if (!arr.length || arr.length === 0) {
       return [];
     }
 

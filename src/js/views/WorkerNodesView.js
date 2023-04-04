@@ -27,7 +27,7 @@ export class WorkerNodesView extends BaseView {
 
   initListeners() {
     this.$view.addEventListener("click", (ev) => {
-      if (ev.target == this.$view) {
+      if (ev.target === this.$view) {
         return;
       }
 

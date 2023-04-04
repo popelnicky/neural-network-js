@@ -58,7 +58,7 @@ export class WorkerNode {
           result = new Pack(pack.mark, pixels, PackNote.PROCESSED);
 
           this.status =
-            this.status == NodeState.BUSY ? NodeState.READY : this.status;
+            this.status === NodeState.BUSY ? NodeState.READY : this.status;
         }
 
         break;
