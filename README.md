@@ -16,9 +16,35 @@
         <li>Use <strong>synaptic.js</strong> for Neural Network</li>
         <li>Put logic of recognition colors to <strong>WebWorker</strong></li>
         <li>For speeding up of recognition big pictures use a few WebWorkers (no more than 8)</li>
-        <li>For building and debuging project use <strong>Node.js ^16.x.x</strong> and <strong>Webpack 5</strong></li>
+        <li>For building and debugging project use <strong>Node.js ^16.x.x</strong> and <strong>Webpack 5</strong></li>
     </ul>
 </div>
+<h2>Installation</h2>
+<div>
+    <p>
+        First of all
+    </p>
+</div>
+
+```
+git clone https://github.com/popelnicky/neural-network-js.git
+```
+
+<div>
+    <p>
+        Next
+    </p>
+</div>
+
+```
+npm install
+npm run start
+```
+
+<h2>Usage</h2>
+
+![Result](/src/assets/nn_result.gif)
+
 <h2>Author</h2>
 
 - [@popelnicky](https://www.github.com/popelnicky)
